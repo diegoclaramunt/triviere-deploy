@@ -1,0 +1,54 @@
+<main class="shell">
+  <section class="hero">
+    <p class="eyebrow">PRUEBA DE DESPLIEGUE</p>
+    <h1>{{ config()?.appName || 'Cargando aplicación…' }}</h1>
+    <p class="lead">
+      Angular y Express comparten una imagen; MongoDB conserva los datos en una
+      colección independiente por cliente.
+    </p>
+
+    @if (config(); as current) {
+      <div class="deployment">
+        <span>Cliente <strong>{{ current.clientName }}</strong></span>
+        <span>Ruta <code>{{ current.basePath }}</code></span>
+      </div>
+    }
+  </section>
+
+  <section class="card">
+    <div>
+      <p class="eyebrow">PRUEBA DE PERSISTENCIA</p>
+      <h2>Mensajes del cliente</h2>
+    </div>
+
+    <form (ngSubmit)="addItem()">
+      <input
+        name="label"
+        [(ngModel)]="label"
+        maxlength="100"
+        placeholder="Escribe un mensaje"
+        aria-label="Mensaje"
+      />
+      <button type="submit">Guardar en Mongo</button>
+    </form>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+      <p class="muted">Consultando la colección…</p>
+    } @else if (!items().length) {
+      <p class="muted">Todavía no hay mensajes para este cliente.</p>
+    } @else {
+      <ul>
+        @for (item of items(); track item._id) {
+          <li>
+            <span>{{ item.label }}</span>
+            <time>{{ item.createdAt }}</time>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</main>

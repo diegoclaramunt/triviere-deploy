@@ -1,0 +1,38 @@
+{
+  "name": "triviere-deploy",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "start": "node server/index.mjs",
+    "dev": "sh scripts/dev.sh",
+    "dev:api": "node --watch server/index.mjs",
+    "dev:web": "ng serve --serve-path /acme --proxy-config proxy.conf.cjs",
+    "build": "npm run build:web && npm run build:server",
+    "build:web": "ng build",
+    "build:server": "esbuild server/index.mjs --bundle --platform=node --target=node24 --format=esm --packages=external --minify --outfile=dist/server/index.mjs",
+    "test": "node --test server/**/*.test.mjs"
+  },
+  "dependencies": {
+    "@angular/common": "20.3.26",
+    "@angular/compiler": "20.3.26",
+    "@angular/core": "20.3.26",
+    "@angular/forms": "20.3.26",
+    "@angular/platform-browser": "20.3.26",
+    "express": "5.2.1",
+    "mongoose": "8.24.1",
+    "rxjs": "7.8.2",
+    "tslib": "2.8.1",
+    "zone.js": "0.15.1"
+  },
+  "devDependencies": {
+    "@angular/build": "20.3.19",
+    "@angular/cli": "20.3.32",
+    "@angular/compiler-cli": "20.3.26",
+    "esbuild": "0.25.9",
+    "typescript": "5.9.3"
+  }
+}

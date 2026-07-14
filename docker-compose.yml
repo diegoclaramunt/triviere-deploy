@@ -1,0 +1,34 @@
+services:
+  app:
+    image: cat-acme:local
+    build:
+      context: .
+      args:
+        APP_NAME: cat
+        CLIENT_NAME: acme
+        MONGO_COLLECTION: acme
+    environment:
+      APP_NAME: cat
+      CLIENT_NAME: acme
+      MONGO_URI: mongodb://mongo:27017/triviere
+      MONGO_COLLECTION: acme
+    ports:
+      - "3000:3000"
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  mongo:
+    image: mongo:8
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  mongo-data:
